@@ -1,31 +1,31 @@
-#include <iostream>
+include <iostream>
 #include <conio.h>
 #include <stdlib.h>
-//#include <string>
+#include <string>
 
 using namespace std;
 
-int tablaCuentas[1000][3], x{0}, y{0}, op{0}, opc{0}, ops{0};
+int tablaCuentas[100][3], op{0}, opc{0}, ops{0};
 string vecmov[6];
 
 int main() 
 {
 //establezco valores de modenas aleatorios en la matriz (pregunta: se puede con base de datos en access?)
-         for(int i = 1; i <= 1000; ++i)
+         for(int i = 1; i <= 100; ++i)
          {
          	tablaCuentas[i][1] = i;
-         	tablaCuentas[i][2] = 1000 - i;
+         	tablaCuentas[i][2] = 10000 - i;
          	tablaCuentas[i][3] = 10000 + rand()% 20000;
 		 }
 	while (op != 2)
 	{
-		int nCuenta{0}, clave{0}, a{0};
-	 	cout << "Bienvenido al cajero autom醫ico\n";
+		int nCuenta{0}, clave{0}, a{0}, x{0}, y{0};
+	 	cout << "Bienvenido al cajero autom谩tico\n";
 		cout << "Ingrese El Numero de cuenta: "; cin >> nCuenta; cout << "\n";
 // verificamos que la cuenta este dentro de los margenes de la matriz
-		while(nCuenta > 1000 or nCuenta < 1)
+		while(nCuenta > 100 or nCuenta < 1)
 		{
-			cout << "umero de cuenta invalido! (Cuenta limite 1000) \n";
+			cout << "隆Numero de cuenta invalido! (Cuenta limite 100) \n";
 			cout << "Ingrese El Numero de cuenta: "; cin >> nCuenta; cout << "\n";	
 		}
 		cout << "Cuenta correcta\n\n";
@@ -56,13 +56,13 @@ int main()
 // Retiro
 					    case 1:
 					        cout << "Cual es la cantidad a retirar?: $"; cin >> y; cout << "\n";
-					        while (y > (tablaCuentas[nCuenta][3]))
+					        while (y > (tablaCuentas[nCuenta][3]) or y < 0)
 							{
 								cout << "\n No cuenta con saldo suficiente de otro valor: "; cin >> y; cout << "\n";
 							}
 							cout<<"Retiro exitoso de "<< y << " pesos"; cout << "\n";
 							tablaCuentas[nCuenta][3] = tablaCuentas[nCuenta][3] - y;
-//desplazamos en el vector la descripci髇 del movimiento
+//desplazamos en el vector la descripci贸n del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -71,7 +71,7 @@ int main()
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci髇 del movimiento
+//agregamos al vector la descripci贸n del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "La cuenta ";
@@ -82,11 +82,12 @@ int main()
 							break;
 //Deposito
 						case 2: 
-							cout << "Cuanto quiere depositar?: "; cin >> x;
-			            	cout << "\n";
+						while (x < 0)
+							{cout << "Cuanto quiere depositar?: "; cin >> x;
+			            	cout << "\n";}
 			            	cout<<" Deposito exitoso de "<< x << " pesos";
 			            	tablaCuentas[nCuenta][3] = tablaCuentas[nCuenta][3] + x;
-//desplazamos en el vector la descripci髇 del movimiento
+//desplazamos en el vector la descripci贸n del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -95,7 +96,7 @@ int main()
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci髇 del movimiento
+//agregamos al vector la descripci贸n del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "Se depositaron a la cuenta #";
@@ -149,21 +150,21 @@ int main()
 					    case 5:
 			            	cout << "A que cuenta quiere hacer transferencia?: "; cin >> x;
 			            	cout << "\n";
-					   	 	while (x > 1000 or x < 1)
+					   	 	while (x > 100 or x < 1)
 							{
 								cout << "\n Cuenta no valida: "; cin >> x;
 								cout << "\n";
 							}
 					    	cout << "Cual es la cantidad a transferir?: "; cin >> y;
 					    	cout << "\n";
-					    	while (y > (tablaCuentas[nCuenta][3]))
+					    	while (y > (tablaCuentas[nCuenta][3]) or y < 0)
 							{
 								cout << "\n No cuenta con saldo suficiente de otro valor: "; cin >> y; cout << "\n";
 							}
 							cout<<"Transferencia exitosa de  "<< y << " pesos a la cuenta " << x; cout << "\n";
 							tablaCuentas[x][3] = tablaCuentas[x][3] + y;
 							tablaCuentas[nCuenta][3] = tablaCuentas[nCuenta][3] - y;
-//desplazamos en el vector la descripci髇 del movimiento
+//desplazamos en el vector la descripci贸n del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -172,7 +173,7 @@ int main()
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci髇 del movimiento
+//agregamos al vector la descripci贸n del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "La cuenta ";
@@ -194,7 +195,7 @@ int main()
 					        break;
 					    case 7:
 					        opc = 2;
-					        system("cls");
+				        system("cls");
 					        cout << "Hasta a luego"; cout << "\n"; getch();
 					        break;
 					    default:
@@ -211,10 +212,15 @@ int main()
 				    }while(opc != 2);
 				}
 			op = 2;      
+			                            vecmov[5] = "";
+										vecmov[4] = "";
+										vecmov[3] = "";
+										vecmov[2] = "";
+										vecmov[1] = "";
 // preguntamos si quiere acceder a otra cuenta
 			cout<<"Desea acceder a otra cuenta?: [1-Si 2-No]"; cin >> op; cout << "\n";
 			system("cls");
 	}
-// Con return detenemos la ejecuci髇 del programa
+// Con return detenemos la ejecuci贸n del programa
     		return 0;
 	}
