@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int tablaCuentas[50][3]; 
+int tablaCuentas[11][4], clim{10}; 
 int x{1}, y{0}, op{0}, opc{0}, ops{0}, tempo;
 string vecmov[6], userli, temps, overtext;
 
@@ -15,11 +15,11 @@ void datmat()
 {
 	while(getline(archivo, userli))
 	{
-		cout << "Numero de cuenta \n";
+	//	cout << "Numero de cuenta \n";
 		tablaCuentas[x][1] = stoi(userli.substr(0,9));
-		cout << "Pin  \n";
+	//	cout << "Pin  \n";
 		tablaCuentas[x][2] = stoi(userli.substr(12,4));
-		cout << "Money  \n";
+	//	cout << "Money  \n";
 		tablaCuentas[x][3] = stoi(userli.substr(19,10));
 		x += 1;
 	//	cout<<userli<<endl;
@@ -41,19 +41,19 @@ void leertxt()
 void guardar()
 {
 	ofstream archivo2("Regis_Bank_2.txt");
-	for(int i= 1; i<= 50; ++i)
+	for(int i= 1; i<= clim; ++i)
 		{
-		overtext += tablaCuentas[i][1];
+		overtext += to_string(tablaCuentas[i][1]);
 		overtext += " | ";
-		overtext += tablaCuentas[i][2];
+		overtext += to_string(tablaCuentas[i][2]);
 		overtext += " | ";
-		temps = tablaCuentas[i][3];
+		temps = to_string(tablaCuentas[i][3]);
 		tempo = 10 - temps.length();
 		for (int i = 1; i <= tempo; i++)
 		{
 			overtext += '0';
 		}
-		overtext += tablaCuentas[i][3];
+		overtext += to_string(tablaCuentas[i][3]);
 		overtext += '\n';  
 		}
 	archivo2 << overtext;
@@ -61,7 +61,7 @@ void guardar()
 
 void mosta()
 {
-	for(int i= 1; i<= 50; ++i)
+	for(int i= 1; i<= clim; ++i)
 	{
 		cout<<tablaCuentas[i][1]<<" "<<tablaCuentas[i][2]<<" "<<tablaCuentas[i][3]<<endl;  
 	}
@@ -86,21 +86,22 @@ int main()
 		cout << "Ingrese El Numero de cuenta: "; cin >> nCuenta; cout << "\n";
 verific:
 // verificamos que la cuenta este dentro de los margenes de la matriz
-		for(int i= 1; i<= 50; ++i)
+		for(int i= 1; i<= clim; ++i)
 		{
-			if (nCuenta = tablaCuentas[i][1])
+			if (nCuenta == tablaCuentas[i][1])
 			{
 				cuPass = i;
 				goto correct;
 			}
 		}
 		{
-			cout << "umero de cuenta invalido!\n";
+			cout << "隆Numero de cuenta invalido!\n";
 			cout << "Ingrese El Numero de cuenta: "; cin >> nCuenta; cout << "\n";
 			goto verific;	
 		}
 correct:
 			cout << "Cuenta correcta\n\n";
+			//cout <<tablaCuentas[cuPass][2] << endl << endl;
 			cout << "Ingrese la clave: ";
 			cin >> clave;
 			if(clave == tablaCuentas[cuPass][2])
@@ -138,7 +139,7 @@ npass:
 							}
 							cout<<"Retiro exitoso de "<< y << " pesos"; cout << "\n";
 							tablaCuentas[cuPass][3] = tablaCuentas[cuPass][3] - y;
-//desplazamos en el vector la descripci髇 del movimiento
+//desplazamos en el vector la descripci贸n del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -147,7 +148,7 @@ npass:
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci髇 del movimiento
+//agregamos al vector la descripci贸n del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "La cuenta ";
@@ -162,7 +163,7 @@ npass:
 			            	cout << "\n";
 			            	cout<<" Deposito exitoso de "<< x << " pesos";
 			            	tablaCuentas[cuPass][3] = tablaCuentas[cuPass][3] + x;
-//desplazamos en el vector la descripci髇 del movimiento
+//desplazamos en el vector la descripci贸n del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -171,7 +172,7 @@ npass:
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci髇 del movimiento
+//agregamos al vector la descripci贸n del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "Se depositaron a la cuenta #";
@@ -226,7 +227,7 @@ npass:
 			            	cout << "A que cuenta quiere hacer transferencia?: "; cin >> x;
 			            	cout << "\n";
 trverific:
-							for(int i= 1; i<= 50; ++i)
+							for(int i= 1; i<= clim; ++i)
 							{
 								if (x = tablaCuentas[i][1])
 								{
@@ -247,7 +248,7 @@ trcorrect:
 							cout<<"Transferencia exitosa de  "<< y << " pesos a la cuenta " << x; cout << "\n";
 							tablaCuentas[trPass][3] = tablaCuentas[trPass][3] + y;
 							tablaCuentas[cuPass][3] = tablaCuentas[cuPass][3] - y;
-//desplazamos en el vector la descripci髇 del movimiento
+//desplazamos en el vector la descripci贸n del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -256,7 +257,7 @@ trcorrect:
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci髇 del movimiento
+//agregamos al vector la descripci贸n del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "La cuenta ";
@@ -300,6 +301,6 @@ trcorrect:
 			system("cls");
 	}
 	guardar();
-// Con return detenemos la ejecuci髇 del programa
+// Con return detenemos la ejecuci贸n del programa
     		return 0;
 	}
