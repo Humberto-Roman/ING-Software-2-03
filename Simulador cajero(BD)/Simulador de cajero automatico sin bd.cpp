@@ -1,52 +1,126 @@
 #include <iostream>
 #include <conio.h>
-#include <stdlib.h>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
-int tablaCuentas[100][3], op{0}, opc{0}, ops{0};
-string vecmov[6];
+int tablaCuentas[50][3]; 
+int x{1}, y{0}, op{0}, opc{0}, ops{0}, tempo;
+string vecmov[6], userli, temps, overtext;
+
+ifstream archivo;
+
+void datmat()
+{
+	while(getline(archivo, userli))
+	{
+		cout << "Numero de cuenta \n";
+		tablaCuentas[x][1] = stoi(userli.substr(0,9));
+		cout << "Pin  \n";
+		tablaCuentas[x][2] = stoi(userli.substr(12,4));
+		cout << "Money  \n";
+		tablaCuentas[x][3] = stoi(userli.substr(19,10));
+		x += 1;
+	//	cout<<userli<<endl;
+	}
+}
+void leertxt()
+{	
+	archivo.open("Regis_Bank_2.txt",ios::in);
+	if(archivo.is_open())
+	{
+		datmat();
+		archivo.close();
+	}
+	else
+	{
+		cout<<"Lo siento no se encontro el archivo...";
+	}
+}
+void guardar()
+{
+	ofstream archivo2("Regis_Bank_2.txt");
+	for(int i= 1; i<= 50; ++i)
+		{
+		overtext += tablaCuentas[i][1];
+		overtext += " | ";
+		overtext += tablaCuentas[i][2];
+		overtext += " | ";
+		temps = tablaCuentas[i][3];
+		tempo = 10 - temps.length();
+		for (int i = 1; i <= tempo; i++)
+		{
+			overtext += '0';
+		}
+		overtext += tablaCuentas[i][3];
+		overtext += '\n';  
+		}
+	archivo2 << overtext;
+}
+
+void mosta()
+{
+	for(int i= 1; i<= 50; ++i)
+	{
+		cout<<tablaCuentas[i][1]<<" "<<tablaCuentas[i][2]<<" "<<tablaCuentas[i][3]<<endl;  
+	}
+}
 
 int main() 
 {
-//establezco valores de modenas aleatorios en la matriz (pregunta: se puede con base de datos en access?)
-         for(int i = 1; i <= 100; ++i)
+	leertxt();
+	mosta();
+/*establezco valores de modenas aleatorios en la matriz
+         for(int i = 1; i <= 50; ++i)
          {
          	tablaCuentas[i][1] = i;
-         	tablaCuentas[i][2] = 10000 - i;
+         	tablaCuentas[i][2] = 50 - i;
          	tablaCuentas[i][3] = 10000 + rand()% 20000;
 		 }
+*/
 	while (op != 2)
 	{
-		int nCuenta{0}, clave{0}, a{0}, x{0}, y{0};
-	 	cout << "Bienvenido al cajero autom谩tico\n";
+		int nCuenta{0}, clave{0}, a{0}, lim{1}, cuPass, trPass;
+	 	cout << "Bienvenido al cajero automatico\n";
 		cout << "Ingrese El Numero de cuenta: "; cin >> nCuenta; cout << "\n";
+verific:
 // verificamos que la cuenta este dentro de los margenes de la matriz
-		while(nCuenta > 100 or nCuenta < 1)
+		for(int i= 1; i<= 50; ++i)
 		{
-			cout << "隆Numero de cuenta invalido! (Cuenta limite 100) \n";
-			cout << "Ingrese El Numero de cuenta: "; cin >> nCuenta; cout << "\n";	
+			if (nCuenta = tablaCuentas[i][1])
+			{
+				cuPass = i;
+				goto correct;
+			}
 		}
-		cout << "Cuenta correcta\n\n";
-		cout << "Ingrese la clave: ";
-		cin >> clave;
+			cout << "umero de cuenta invalido!\n";
+			cout << "Ingrese El Numero de cuenta: "; cin >> nCuenta; cout << "\n";
+			goto verific;	
+correct:
+			cout << "Cuenta correcta\n\n";
+			cout << "Ingrese la clave: ";
+			cin >> clave;
+			if(clave == tablaCuentas[cuPass][2])
+			{
+				goto npass;
+			}
 //Buscamos que la clave concuerde con la cuenta
-		while (clave != tablaCuentas[nCuenta][2])
+		while (clave != tablaCuentas[cuPass][2])
 			{
 			 a = a + 1;
 	   		 cout << "Clave incorrecta le quedan  " << 4 - a << " intentos";
 			 cout << " Ingrese la clave: "; cin >> clave; cout << "\n";
 			 if (a == 3)
 			 {
-			 	clave = tablaCuentas[nCuenta][2];
 			 	cout << "intentos agotados \n";
+			 	goto npass;
 			 }	 
 			}
-	   		
+npass:
 // En caso de pasar los 2 filtros anteriores damos por hecho que es un acceso idoneo.
 			if(a < 3)
-			{cout << "Bienvenido al cajero usuario: " <<tablaCuentas[nCuenta][1]<<"\n";
+			{cout << "Bienvenido al cajero usuario: " <<tablaCuentas[cuPass][1]<<"\n";
 				do 
 				{
 					cout << "\n |1) Retiro |2) Deposito | 3) Consulta de saldo |4) cambio de nip | 5)Transferencias | 6)Revisar los movimientos |  7)Salir  |\n";
@@ -56,13 +130,13 @@ int main()
 // Retiro
 					    case 1:
 					        cout << "Cual es la cantidad a retirar?: $"; cin >> y; cout << "\n";
-					        while (y > (tablaCuentas[nCuenta][3]) or y < 0)
+					        while (y > (tablaCuentas[cuPass][3]))
 							{
 								cout << "\n No cuenta con saldo suficiente de otro valor: "; cin >> y; cout << "\n";
 							}
 							cout<<"Retiro exitoso de "<< y << " pesos"; cout << "\n";
-							tablaCuentas[nCuenta][3] = tablaCuentas[nCuenta][3] - y;
-//desplazamos en el vector la descripci贸n del movimiento
+							tablaCuentas[cuPass][3] = tablaCuentas[cuPass][3] - y;
+//desplazamos en el vector la descripci髇 del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -71,7 +145,7 @@ int main()
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci贸n del movimiento
+//agregamos al vector la descripci髇 del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "La cuenta ";
@@ -82,12 +156,11 @@ int main()
 							break;
 //Deposito
 						case 2: 
-						while (x < 0)
-							{cout << "Cuanto quiere depositar?: "; cin >> x;
-			            	cout << "\n";}
+							cout << "Cuanto quiere depositar?: "; cin >> x;
+			            	cout << "\n";
 			            	cout<<" Deposito exitoso de "<< x << " pesos";
-			            	tablaCuentas[nCuenta][3] = tablaCuentas[nCuenta][3] + x;
-//desplazamos en el vector la descripci贸n del movimiento
+			            	tablaCuentas[cuPass][3] = tablaCuentas[cuPass][3] + x;
+//desplazamos en el vector la descripci髇 del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -96,7 +169,7 @@ int main()
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci贸n del movimiento
+//agregamos al vector la descripci髇 del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "Se depositaron a la cuenta #";
@@ -109,13 +182,13 @@ int main()
 							break;
 								
 			        	case 3:
-		         			cout << "Su saldo actual es: $"<<tablaCuentas[nCuenta][3] << "\n\n";
+		         			cout << "Su saldo actual es: $"<<tablaCuentas[cuPass][3] << "\n\n";
 		            	break;
 //Cambio de nip   
 		            	case 4:
 		            		cout<< "ingrese su antiguo Nip: "; cin >> x; cout << "\n";
 		            		a = 0;
-		            		while(x != tablaCuentas[nCuenta][2])
+		            		while(x != tablaCuentas[cuPass][2])
 							{
 							 a = a + 1;
 	   						 cout << "Nip incorrecta le quedan  " << 3 - a << " intentos";
@@ -129,7 +202,7 @@ int main()
 							}
 							if (y != x)
 							{
-								tablaCuentas[nCuenta][2] = y;
+								tablaCuentas[cuPass][2] = y;
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -150,21 +223,29 @@ int main()
 					    case 5:
 			            	cout << "A que cuenta quiere hacer transferencia?: "; cin >> x;
 			            	cout << "\n";
-					   	 	while (x > 100 or x < 1)
+trverific:
+							for(int i= 1; i<= 50; ++i)
 							{
+								if (x = tablaCuentas[i][1])
+								{
+									trPass = i;
+									goto trcorrect;
+								}
+							}
 								cout << "\n Cuenta no valida: "; cin >> x;
 								cout << "\n";
-							}
+								goto trverific;
+trcorrect:
 					    	cout << "Cual es la cantidad a transferir?: "; cin >> y;
 					    	cout << "\n";
-					    	while (y > (tablaCuentas[nCuenta][3]) or y < 0)
+					    	while (y > (tablaCuentas[cuPass][3]))
 							{
 								cout << "\n No cuenta con saldo suficiente de otro valor: "; cin >> y; cout << "\n";
 							}
 							cout<<"Transferencia exitosa de  "<< y << " pesos a la cuenta " << x; cout << "\n";
-							tablaCuentas[x][3] = tablaCuentas[x][3] + y;
-							tablaCuentas[nCuenta][3] = tablaCuentas[nCuenta][3] - y;
-//desplazamos en el vector la descripci贸n del movimiento
+							tablaCuentas[trPass][3] = tablaCuentas[trPass][3] + y;
+							tablaCuentas[cuPass][3] = tablaCuentas[cuPass][3] - y;
+//desplazamos en el vector la descripci髇 del movimiento
 									if (vecmov[1] != "")
 									{
 										vecmov[5] = vecmov[4];
@@ -173,7 +254,7 @@ int main()
 										vecmov[2] = vecmov[1];
 										vecmov[1] = "";
 									}
-//agregamos al vector la descripci贸n del movimiento
+//agregamos al vector la descripci髇 del movimiento
 								if (vecmov[1] == "")
 								{
 									vecmov[1] = "La cuenta ";
@@ -195,7 +276,7 @@ int main()
 					        break;
 					    case 7:
 					        opc = 2;
-				        system("cls");
+					        system("cls");
 					        cout << "Hasta a luego"; cout << "\n"; getch();
 					        break;
 					    default:
@@ -212,15 +293,11 @@ int main()
 				    }while(opc != 2);
 				}
 			op = 2;      
-			                            vecmov[5] = "";
-										vecmov[4] = "";
-										vecmov[3] = "";
-										vecmov[2] = "";
-										vecmov[1] = "";
 // preguntamos si quiere acceder a otra cuenta
 			cout<<"Desea acceder a otra cuenta?: [1-Si 2-No]"; cin >> op; cout << "\n";
 			system("cls");
 	}
-// Con return detenemos la ejecuci贸n del programa
+	guardar();
+// Con return detenemos la ejecuci髇 del programa
     		return 0;
 	}
