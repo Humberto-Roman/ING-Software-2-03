@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int idprod{0}, idcli{0};
+int idprod{0}, idcli{0}, regix{1
+};
 float nucredito{10000}, abo{0.00}, totalcom{0.00}, CortecajaTotal{0.00};
 
 struct prod{
@@ -155,6 +156,15 @@ creditfail:
 			cout << "Saldo restante: " << clientes[idcli].credit << endl;
 		}  
 	}
+	x = 1;
+	while(lcompra[x].id > 0)
+	{
+		registeel[regix].id = lcompra[x].id;
+		registeel[regix].nomprod = lcompra[x].nomprod;
+		registeel[regix].prec = lcompra[x].prec;
+		registeel[regix].cant = lcompra[x].cant;
+		registeel[regix].subtotal = lcompra[x].subtotal;
+	}
 	CortecajaTotal = CortecajaTotal + totalcom;
 	getch();
 }
@@ -214,20 +224,38 @@ void regigigas()
 	cout<<"||Registros de ventas||" << endl;
 	while(registeel[x].id > 0)
 	{
-		x= x + 1;
-		y = x;
+		cout<<registeel[x].id << " | " << registeel[x].nomprod << " | "<<registeel[x].prec << " | " << registeel[x].cant << " | "<<registeel[x].subtotal << endl;
 	}
-	x = 1;
-	while(lcompra[x].id > 0)
+	getch();
+}
+void agreproduc()
+{	int x{1}, cant{0};
+	float pre{0};
+    string nombre{""};
+	while(invprodres[x].id > 0)
 	{
-		registeel[y].id = lcompra[x].id;
-		registeel[y].nomprod = lcompra[x].nomprod;
-		registeel[y].prec = lcompra[x].prec;
-		registeel[y].cant = lcompra[x].cant;
-		registeel[y].subtotal = lcompra[x].subtotal;
 		x = x + 1;
-		y = y + 1;
 	}
+	invprodres[x].id = x;
+	cout<<"id: "<< x;
+	cout<<"(Max 30 long)Nombre: "; getline(cin, nombre); getline(cin, nombre); cout << endl;
+	cout<<"Precio: "; cin >> pre; cout << endl << endl;	
+	while(pre <= 0.00)
+	{
+		cout<<"Precio incorrecto \n\n";
+		cout<<"Precio:"; cin >>pre; cout << endl;
+	}
+	cout<<"Cantidad: "; cin >> cant; cout << endl;
+	invprodres[x].nomprod = nombre.substr(0,30);
+	invprodres[x].prec = pre;
+	invprodres[x].invcant = cant;
+	
+	system("cls");
+	cout<<"id: "<< invprodres[x].id << endl;
+	cout<<"Nombre del producto: "<< invprodres[x].nomprod << endl;
+	cout<<"Precio del producto: "<< invprodres[x].prec << endl;
+	cout<<"cantidad en inventario: "<< invprodres[x].invcant << endl;
+	
 	getch();
 }
 void inventario()
